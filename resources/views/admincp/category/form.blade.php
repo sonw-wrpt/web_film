@@ -23,7 +23,16 @@
                             {!! Form::text('title', isset($category) ? $category->title : '', [
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu',
-                                'id' => 'title'
+                                'id' => 'slug',
+                                'onkeyup' => 'ChangToSlug()',
+                            ]) !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('slug', 'Slug', []) !!}
+                            {!! Form::text('slug', isset($category) ? $category->slug : '', [
+                                'class' => 'form-control',
+                                'placeholder' => 'Nhập vào dữ liệu',
+                                'id' => 'convert_slug',
                             ]) !!}
                         </div>
                         <div class="form-group">
@@ -32,13 +41,13 @@
                                 'style' => 'resize:none',
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu...',
-                                'id' => 'description'
+                                'id' => 'description',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Actice', 'Actice', []) !!}
                             {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($category) ? $category->status : '', [
-                                'class' => 'form-control'
+                                'class' => 'form-control',
                             ]) !!}
                         </div><br>
                         @if (!isset($category))

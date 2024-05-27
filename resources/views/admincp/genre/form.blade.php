@@ -19,26 +19,35 @@
                             {!! Form::open(['route' => ['genre.update', $genre->id], 'method' => 'PUT']) !!}
                         @endif
                         <div class="form-group">
-                            {!! Form::label('title', 'Title', []) !!}
+                            {!! Form::label('title', 'Tiêu đề', []) !!}
                             {!! Form::text('title', isset($genre) ? $genre->title : '', [
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu',
-                                'id' => 'title'
+                                'id' => 'slug',
+                                'onkeyup' => 'ChangeToSlug()',
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('description', 'Description', []) !!}
+                            {!! Form::label('slug', 'Slug', []) !!}
+                            {!! Form::text('slug', isset($genre) ? $genre->slug : '', [
+                                'class' => 'form-control',
+                                'placeholder' => 'Nhập vào dữ liệu',
+                                'id' => 'convert_slug',
+                            ]) !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('description', 'Mô tả', []) !!}
                             {!! Form::textarea('description', isset($genre) ? $genre->description : '', [
                                 'style' => 'resize:none',
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu...',
-                                'id' => 'description'
+                                'id' => 'description',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Actice', 'Actice', []) !!}
                             {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($genre) ? $genre->status : '', [
-                                'class' => 'form-control'
+                                'class' => 'form-control',
                             ]) !!}
                         </div><br>
                         @if (!isset($genre))
@@ -54,10 +63,11 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Active/Inactive</th>
-                            <th scope="col">Manage</th>
+                            <th scope="col">Tiêu đề</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Mô tả</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Quản lí</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,6 +75,7 @@
                             <tr>
                                 <th scope="row">{{ $key }}</th>
                                 <td>{{ $cate->title }}</td>
+                                <td>{{ $cate->slug }}</td>
                                 <td>{{ $cate->description }}</td>
                                 <td>
                                     @if ($cate->status)

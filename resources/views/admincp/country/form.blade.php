@@ -23,7 +23,16 @@
                             {!! Form::text('title', isset($country) ? $country->title : '', [
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu',
-                                'id' => 'title'
+                                'id' => 'slug',
+                                'onkeyup' => 'ChangeToSlug()',
+                            ]) !!}
+                        </div>
+                        <div class="form-group">
+                            {!! Form::label('slug', 'Slug', []) !!}
+                            {!! Form::text('slug', isset($country) ? $country->slug : '', [
+                                'class' => 'form-control',
+                                'placeholder' => 'Nhập vào dữ liệu',
+                                'id' => 'convert_slug',
                             ]) !!}
                         </div>
                         <div class="form-group">
@@ -32,13 +41,13 @@
                                 'style' => 'resize:none',
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu...',
-                                'id' => 'description'
+                                'id' => 'description',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Actice', 'Actice', []) !!}
                             {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($country) ? $country->status : '', [
-                                'class' => 'form-control'
+                                'class' => 'form-control',
                             ]) !!}
                         </div><br>
                         @if (!isset($country))
@@ -54,10 +63,11 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Active/Inactive</th>
-                            <th scope="col">Manage</th>
+                            <th scope="col">Tiêu đề</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Mô tả</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Quản lí</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,6 +75,7 @@
                             <tr>
                                 <th scope="row">{{ $key }}</th>
                                 <td>{{ $cate->title }}</td>
+                                <td>{{ $cate->slug }}</td>
                                 <td>{{ $cate->description }}</td>
                                 <td>
                                     @if ($cate->status)

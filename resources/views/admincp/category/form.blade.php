@@ -19,12 +19,12 @@
                             {!! Form::open(['route' => ['category.update', $category->id], 'method' => 'PUT']) !!}
                         @endif
                         <div class="form-group">
-                            {!! Form::label('title', 'Title', []) !!}
+                            {!! Form::label('title', 'Tiêu đề', []) !!}
                             {!! Form::text('title', isset($category) ? $category->title : '', [
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu',
                                 'id' => 'slug',
-                                'onkeyup' => 'ChangToSlug()',
+                                'onkeyup' => 'ChangeToSlug()',
                             ]) !!}
                         </div>
                         <div class="form-group">
@@ -36,7 +36,7 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('description', 'Description', []) !!}
+                            {!! Form::label('description', 'Mô tả', []) !!}
                             {!! Form::textarea('description', isset($category) ? $category->description : '', [
                                 'style' => 'resize:none',
                                 'class' => 'form-control',
@@ -45,10 +45,15 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('Actice', 'Actice', []) !!}
-                            {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($category) ? $category->status : '', [
-                                'class' => 'form-control',
-                            ]) !!}
+                            {!! Form::label('status', 'Trạng thái', []) !!}
+                            {!! Form::select(
+                                'status',
+                                ['1' => 'Hiển thị', '0' => 'Không hiển thị'],
+                                isset($category) ? $category->status : '',
+                                [
+                                    'class' => 'form-control',
+                                ],
+                            ) !!}
                         </div><br>
                         @if (!isset($category))
                             {!! Form::submit('Thêm dữ liệu', ['class' => 'btn btn-success']) !!}
@@ -63,18 +68,20 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Active/Inactive</th>
-                            <th scope="col">Manage</th>
+                            <th scope="col">Tiêu đề</th>
+                            <th scope="col">Mô tả</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Quản lý</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($list as $key => $cate)
                             <tr>
-                                <th scope="row">{{ $key }}</th>
+                                <th scope="row">{{ $key + 1 }}</th>
                                 <td>{{ $cate->title }}</td>
                                 <td>{{ $cate->description }}</td>
+                                <td>{{ $cate->slug }}</td>
                                 <td>
                                     @if ($cate->status)
                                         Hiển thị

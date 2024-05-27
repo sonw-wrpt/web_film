@@ -112,19 +112,13 @@
                             <li class="current-menu-item active"><a title="Trang Chủ"
                                     href="{{ route('homepage') }}">Trang Chủ</a>
                             </li>
-                            @foreach ($category as $key => $cate)
-                                <li class="mega"><a title="{{ $cate->title }}"
-                                        href="{{ route('category') }}">{{ $cate->title }}</a>
-                                </li>
-                            @endforeach
-
                             <li class="mega dropdown">
                                 <a title="Thể Loại" href="#" data-toggle="dropdown" class="dropdown-toggle"
                                     aria-haspopup="true">Thể Loại <span class="caret"></span></a>
                                 <ul role="menu" class=" dropdown-menu">
                                     @foreach ($genre as $key => $gen)
                                         <li><a title="{{ $gen->title }}"
-                                                href="{{ route('genre') }}">{{ $gen->title }}</a></li>
+                                                href="{{ route('genre', $gen->slug) }}">{{ $gen->title }}</a></li>
                                     @endforeach
                                 </ul>
                             </li>
@@ -134,10 +128,18 @@
                                 <ul role="menu" class=" dropdown-menu">
                                     @foreach ($country as $key => $count)
                                         <li><a title="{{ $count->title }}"
-                                                href="{{ route('country') }}">{{ $count->title }}</a></li>
+                                                href="{{ route('country', $count->slug) }}">{{ $count->title }}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </li>
+                            @foreach ($category as $key => $cate)
+                                <li class="mega"><a title="{{ $cate->title }}"
+                                        href="{{ route('category', $cate->slug) }}">{{ $cate->title }}</a>
+                                </li>
+                            @endforeach
+
+
                         </ul>
                     </div>
                     <ul class="nav navbar-nav navbar-left" style="background:#000;">

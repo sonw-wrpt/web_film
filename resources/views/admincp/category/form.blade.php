@@ -106,4 +106,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var alert = document.querySelector('.alert-success');
+            if (alert) {
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 2000); // 2000ms = 2s
+            }
+        });
+    </script>
 @endsection

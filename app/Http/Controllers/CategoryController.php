@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $category->description = $data['description'];
         $category->status      = $data['status'];
         $category->save();
-        return redirect()->back();
+        return redirect()->back()->with('status', 'Thêm danh mục thành công!');
     }
 
     /**
@@ -86,7 +86,7 @@ class CategoryController extends Controller
         $category->description = $data['description'];
         $category->status      = $data['status'];
         $category->save();
-        return redirect()->back();
+        return redirect()->route('category.create')->with('status', 'Cập nhật danh mục thành công!');
     }
 
     /**

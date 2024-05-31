@@ -43,7 +43,7 @@ class CountryController extends Controller
         $country->description = $data['description'];
         $country->status      = $data['status'];
         $country->save();
-        return redirect()->back();
+        return redirect()->back()->with('status', 'Thêm quốc gia thành công!');
     }
 
     /**
@@ -86,7 +86,7 @@ class CountryController extends Controller
         $country->description = $data['description'];
         $country->status      = $data['status'];
         $country->save();
-        return redirect()->back();
+        return redirect()->route('country.create')->with('status', 'Cập nhật quốc gia thành công!');
     }
 
     /**

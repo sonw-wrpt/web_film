@@ -43,7 +43,7 @@ class GenreController extends Controller
         $genre->description = $data['description'];
         $genre->status      = $data['status'];
         $genre->save();
-        return redirect()->back();
+        return redirect()->back()->with('status', 'Thêm thể loại thành công!');
     }
 
     /**
@@ -86,7 +86,7 @@ class GenreController extends Controller
         $genre->description = $data['description'];
         $genre->status      = $data['status'];
         $genre->save();
-        return redirect()->back();
+        return redirect()->route('genre.create')->with('status', 'Cập nhật thể loại thành công!');
     }
 
     /**

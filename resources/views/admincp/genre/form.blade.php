@@ -88,7 +88,7 @@
                                     {!! Form::open([
                                         'method' => 'DELETE',
                                         'route' => ['genre.destroy', $cate->id],
-                                        'onsubmit' => 'return confirm("Xóa?")',
+                                        'onsubmit' => 'return confirm("Xóa nhé?")',
                                     ]) !!}
                                     {!! Form::submit('Xóa', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}
@@ -101,4 +101,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var alert = document.querySelector('.alert-success');
+            if (alert) {
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 2000); // 2000ms = 2s
+            }
+        });
+    </script>
 @endsection

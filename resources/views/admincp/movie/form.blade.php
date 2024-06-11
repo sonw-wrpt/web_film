@@ -16,7 +16,7 @@
                         @if (!isset($movie))
                             {!! Form::open(['route' => 'movie.store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
                         @else
-                            {!! Form::open(['route' => ['movie.update', $movie->id], 'method' => 'PUT']) !!}
+                            {!! Form::open(['route' => ['movie.update', $movie->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
                         @endif
                         <div class="form-group">
                             {!! Form::label('title', 'Tiêu đề', []) !!}
@@ -52,25 +52,28 @@
                         </div>
                         <div class="form-group">
                             {!! Form::label('Category', 'Danh mục', []) !!}
-                            {!! Form::select('category_id', $category, isset($movie) ? $movie->category : '', [
+                            {!! Form::select('category_id', $category, isset($movie) ? $movie->category_id : '', [
                                 'class' => 'form-control',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Country', 'Quốc gia', []) !!}
-                            {!! Form::select('country_id', $country, isset($movie) ? $movie->country : '', [
+                            {!! Form::select('country_id', $country, isset($movie) ? $movie->country_id : '', [
                                 'class' => 'form-control',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Genre', 'Thể loại', []) !!}
-                            {!! Form::select('genre_id', $genre, isset($movie) ? $movie->genre : '', [
+                            {!! Form::select('genre_id', $genre, isset($movie) ? $movie->genre_id : '', [
                                 'class' => 'form-control',
                             ]) !!}
                         </div>
                         <div class="form-group">
                             {!! Form::label('Image', 'Hình ảnh', []) !!}
                             {!! Form::file('image', ['class' => 'form-control']) !!}
+                            @if (isset($movie) && $movie->image)
+                                <img src="{{ asset('uploads/movie/' . $movie->image) }}" alt="" width="150px">
+                            @endif
                         </div>
                         <br>
                         @if (!isset($movie))
@@ -87,9 +90,13 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tiêu đề</th>
+                            <th scope="col">Hình ảnh</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Mô tả</th>
                             <th scope="col">Trạng thái</th>
+                            <th scope="col">Danh mục</th>
+                            <th scope="col">Thể loại</th>
+                            <th scope="col">Quốc gia</th>
                             <th scope="col">Quản lí</th>
                         </tr>
                     </thead>
@@ -98,6 +105,8 @@
                             <tr>
                                 <th scope="row">{{ $key }}</th>
                                 <td>{{ $cate->title }}</td>
+                                <td><img src="{{ asset('uploads/movie/' . $cate->image) }}" alt="" width="150px">
+                                </td>
                                 <td>{{ $cate->slug }}</td>
                                 <td>{{ $cate->description }}</td>
                                 <td>
@@ -107,11 +116,14 @@
                                         Không hiển thị
                                     @endif
                                 </td>
+                                <td>{{ $cate->category->title }}</td>
+                                <td>{{ $cate->genre->title }}</td>
+                                <td>{{ $cate->country->title }}</td>
                                 <td>
                                     {!! Form::open([
                                         'method' => 'DELETE',
                                         'route' => ['movie.destroy', $cate->id],
-                                        'onsubmit' => 'return confirm("Xóa?")',
+                                        'onsubmit' => 'return confirm("Bạn có muốn xóa không?")',
                                     ]) !!}
                                     {!! Form::submit('Xóa', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}

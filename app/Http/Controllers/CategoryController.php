@@ -98,6 +98,6 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         Category::find($id)->delete();
-        return redirect()->back();
+        return redirect()->back()->with('status', ' Xóa thành công!');
     }
 }

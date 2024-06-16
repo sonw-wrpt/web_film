@@ -14,6 +14,7 @@
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -95,6 +96,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+
     <script type="text/javascript">
         function ChangeToSlug() {
 
@@ -127,6 +130,33 @@
             //In slug ra textbox có id “slug”
             document.getElementById('convert_slug').value = slug;
         }
+    </script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            $('.order_position').sortable({
+                placeholder: 'ui-state-highlight',
+                update: function(event, ui) {
+                    var array_id = [];
+                    $('.order_position tr').each(function() {
+                        array_id.push($(this).attr('id'));
+                    });
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{ route('resorting') }}', // Đảm bảo đúng tên route
+                        method: 'POST',
+                        data: {
+                            array_id: array_id
+                        },
+                        success: function(data) {
+                            alert('Sắp xếp thứ tự thành công');
+                        }
+                    });
+                }
+            });
+        });
     </script>
 </body>
 

@@ -55,7 +55,6 @@ class MovieController extends Controller
 
         $get_image = $request->file('image');
 
-
         if ($get_image) {
             $get_name_image = $get_image->getClientOriginalName();
             $name_image     = current(explode('.', $get_name_image));

@@ -13,6 +13,7 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+
                         @if (!isset($movie))
                             {!! Form::open(['route' => 'movie.store', 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
                         @else
@@ -103,12 +104,13 @@
                     <tbody>
                         @foreach ($list as $key => $cate)
                             <tr>
-                                <th scope="row">{{ $key }}</th>
+                                <th scope="row">{{ $key + 1 }}</th>
                                 <td>{{ $cate->title }}</td>
                                 <td><img src="{{ asset('uploads/movie/' . $cate->image) }}" alt="" width="150px">
                                 </td>
                                 <td>{{ $cate->slug }}</td>
-                                <td>{{ $cate->description }}</td>
+                                <td>{{ \Illuminate\Support\Str::words($cate->description, 100, '...') }}</td>
+
                                 <td>
                                     @if ($cate->status)
                                         Hiển thị
@@ -119,6 +121,8 @@
                                 <td>{{ $cate->category->title }}</td>
                                 <td>{{ $cate->genre->title }}</td>
                                 <td>{{ $cate->country->title }}</td>
+
+
                                 <td>
                                     {!! Form::open([
                                         'method' => 'DELETE',

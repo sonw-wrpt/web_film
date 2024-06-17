@@ -45,7 +45,7 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('Actice', 'Actice', []) !!}
+                            {!! Form::label('Actice', 'Trạng thái', []) !!}
                             {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($genre) ? $genre->status : '', [
                                 'class' => 'form-control',
                             ]) !!}

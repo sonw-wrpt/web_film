@@ -13,13 +13,14 @@
                                 {{ session('status') }}
                             </div>
                         @endif
+                        
                         @if (!isset($country))
                             {!! Form::open(['route' => 'country.store', 'method' => 'POST']) !!}
                         @else
                             {!! Form::open(['route' => ['country.update', $country->id], 'method' => 'PUT']) !!}
                         @endif
                         <div class="form-group">
-                            {!! Form::label('title', 'Title', []) !!}
+                            {!! Form::label('title', 'Tiêu đề', []) !!}
                             {!! Form::text('title', isset($country) ? $country->title : '', [
                                 'class' => 'form-control',
                                 'placeholder' => 'Nhập vào dữ liệu',
@@ -36,7 +37,7 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('description', 'Description', []) !!}
+                            {!! Form::label('description', 'Mô tả', []) !!}
                             {!! Form::textarea('description', isset($country) ? $country->description : '', [
                                 'style' => 'resize:none',
                                 'class' => 'form-control',
@@ -45,7 +46,7 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::label('Actice', 'Actice', []) !!}
+                            {!! Form::label('Actice', 'Trạng thái', []) !!}
                             {!! Form::select('status', ['1' => 'Hiện thị', '0' => 'Không'], isset($country) ? $country->status : '', [
                                 'class' => 'form-control',
                             ]) !!}

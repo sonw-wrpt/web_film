@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Genre;
-
+use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 class GenreController extends Controller
 {
     /**
@@ -36,7 +37,7 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        $data                  = $request->all();
+        $data               = $request->all();
         $genre              = new Genre();
         $genre->title       = $data['title'];
         $genre->slug        = $data['slug'];
@@ -79,7 +80,7 @@ class GenreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data                  = $request->all();
+        $data               = $request->all();
         $genre              = Genre::find($id);
         $genre->title       = $data['title'];
         $genre->slug        = $data['slug'];

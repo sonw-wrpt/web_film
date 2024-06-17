@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
-
+use App\Http\Requests\StoreMovieRequest;
+use App\Http\Requests\UpdateMovieRequest;
 class CategoryController extends Controller
 {
     /**
@@ -36,12 +37,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $maxPosition = Category::max('position');
+        $newPosition = $maxPosition + 1;
+
         $data                  = $request->all();
         $category              = new Category();
         $category->title       = $data['title'];
         $category->slug        = $data['slug'];
         $category->description = $data['description'];
         $category->status      = $data['status'];
+          $category->position  = $newPosition;
         $category->save();
         return redirect()->back()->with('status', 'Thêm danh mục thành công!');
     }

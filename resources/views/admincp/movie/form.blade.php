@@ -70,6 +70,12 @@
                             ]) !!}
                         </div>
                         <div class="form-group">
+                            {!! Form::label('Hot', 'Hot', []) !!}
+                            {!! Form::select('hotmovie', ['1' => 'Có', '0' => 'Không'], isset($movie) ? $movie->hotmovie : '', [
+                                'class' => 'form-control',
+                            ]) !!}
+                        </div>
+                        <div class="form-group">
                             {!! Form::label('Image', 'Hình ảnh', []) !!}
                             {!! Form::file('image', ['class' => 'form-control']) !!}
                             @if (isset($movie) && $movie->image)
@@ -86,12 +92,14 @@
                         {!! Form::close() !!}
                     </div>
                 </div>
-                <table class="table">
+                <br>
+                <table class="table" id="tablemovie">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Tiêu đề</th>
                             <th scope="col">Hình ảnh</th>
+                            <th scope="col">Hot</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Mô tả</th>
                             <th scope="col">Trạng thái</th>
@@ -108,6 +116,13 @@
                                 <td>{{ $cate->title }}</td>
                                 <td><img src="{{ asset('uploads/movie/' . $cate->image) }}" alt="" width="150px">
                                 </td>
+                                <td>
+                                    @if ($cate->hotmovie == 0)
+                                        Không
+                                    @else
+                                        Có
+                                    @endif
+                                </td>
                                 <td>{{ $cate->slug }}</td>
                                 <td>{{ \Illuminate\Support\Str::words($cate->description, 100, '...') }}</td>
 
@@ -118,11 +133,9 @@
                                         Không hiển thị
                                     @endif
                                 </td>
-                                <td>{{ $cate->category->title }}</td>
-                                <td>{{ $cate->genre->title }}</td>
-                                <td>{{ $cate->country->title }}</td>
-
-
+                                <td>{{ optional($cate->category)->title ?? 'Không có danh mục' }}</td>
+                                <td>{{ optional($cate->genre)->title ?? 'Không có thể loại' }}</td>
+                                <td>{{ optional($cate->country)->title ?? 'Không có quốc gia' }}</td>
                                 <td>
                                     {!! Form::open([
                                         'method' => 'DELETE',

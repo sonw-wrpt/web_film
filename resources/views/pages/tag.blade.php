@@ -5,8 +5,9 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-6">
-                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">{{ $cate_slug->title }}</a> 
-                                    <span class="breadcrumb_last" aria-current="page"></span></span></span></div>
+                        <div class="yoast_breadcrumb hidden-xs"><span><span><a href="">Phim theo tags</a> »
+                                    <span class="breadcrumb_last" aria-current="page">{{ $tag }}</span></span></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -17,7 +18,7 @@
         <main id="main-contents" class="col-xs-12 col-sm-12 col-md-8">
             <section>
                 <div class="section-bar clearfix">
-                    <h1 class="section-title"><span>{{ $cate_slug->title }}</span></h1>
+                    <h1 class="section-title"><span>Tags: {{ $tag }}</span></h1>
                 </div>
                 <div class="halim_box">
                     @foreach ($movie as $key => $movie)
@@ -25,7 +26,8 @@
                             <div class="halim-item">
                                 <a class="halim-thumb" href="{{ route('movie', $movie->slug) }}">
                                     <figure><img class="lazy img-responsive"
-                                            src="{{ asset('uploads/movie/' . $movie->image) }}" title="{{ $movie->title }}">
+                                            src="{{ asset('uploads/movie/' . $movie->image) }}" alt="{{ $movie->title }}"
+                                            title="{{ $movie->title }}">
                                     </figure>
                                     <span class="status">
                                         @if ($movie->resolution == 0)

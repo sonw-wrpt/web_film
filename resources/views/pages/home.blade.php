@@ -1,4 +1,4 @@
-spanfigure @extends('layout')
+@extends('layout')
 @section('content')
     <div class="row container" id="wrapper">
         <div class="halim-panel-filter">
@@ -49,16 +49,33 @@ spanfigure @extends('layout')
                 @foreach ($hotmovie as $key => $hot)
                     <article class="thumb grid-item post-38498">
                         <div class="halim-item">
-                            <a class="halim-thumb" href="{{ route('movie') }}" title="{{ $hot->title }}">
+                            <a class="halim-thumb" href="{{ route('movie', $hot->slug) }}" title="{{ $hot->title }}">
                                 <figure><img class="lazy img-responsive" src="{{ asset('uploads/movie/' . $hot->image) }}"
                                         alt="Đại Thánh Vô Song" title="{{ $hot->title }}"></figure>
-                                <span class="status">HD</span><span class="episode"><i class="fa fa-play"
-                                        aria-hidden="true"></i>Vietsub</span>
+                                <span class="status">
+                                    @if ($hot->resolution == 0)
+                                        2K
+                                    @elseif($hot->resolution == 1)
+                                        Full HD
+                                    @elseif($hot->resolution == 2)
+                                        HD
+                                    @elseif($hot->resolution == 3)
+                                        SD
+                                    @else
+                                        Không có độ phân giải
+                                    @endif
+                                </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                    @if ($hot->subtitle == 0)
+                                        Vietsub
+                                    @else
+                                        Thuyết minh
+                                    @endif
+                                </span>
                                 <div class="icon_overlay"></div>
                                 <div class="halim-post-title-box">
                                     <div class="halim-post-title ">
                                         <p class="entry-title">{{ $hot->title }}</p>
-                                        {{-- <p class="original_title">Monkey King: The One And Only</p> --}}
+                                        <p class="original_title">{{ $hot->name_movie }}</p>
                                     </div>
                                 </div>
                             </a>
@@ -71,7 +88,7 @@ spanfigure @extends('layout')
             @foreach ($category_home as $key => $cate_home)
                 <section id="halim-advanced-widget-2">
                     <div class="section-heading">
-                        <a href="danhmuc.php" title="Phim Bộ">
+                        <a href="{{ route('category', $cate_home->slug) }}" title="Phim Bộ">
                             <span class="h-text">{{ $cate_home->title }}</span>
                         </a>
                     </div>
@@ -79,18 +96,35 @@ spanfigure @extends('layout')
                         @foreach ($cate_home->movie->take(10) as $key => $movie)
                             <article class="col-md-3 col-sm-3 col-xs-6 thumb grid-item post-37606">
                                 <div class="halim-item">
-                                    <a class="halim-thumb" href="chitiet.php">
+                                    <a class="halim-thumb" href="{{ route('movie', $movie->slug) }}">
                                         <figure><img class="lazy img-responsive"
                                                 src="{{ asset('uploads/movie/' . $movie->image) }}"
                                                 title="{{ $movie->title }}">
                                         </figure>
-                                        <span class="status">TẬP 15</span><span class="episode"><i class="fa fa-play"
-                                                aria-hidden="true"></i>Vietsub</span>
+                                        <span class="status">
+                                            @if ($movie->resolution == 0)
+                                                2K
+                                            @elseif($movie->resolution == 1)
+                                                Full HD
+                                            @elseif($movie->resolution == 2)
+                                                HD
+                                            @elseif($movie->resolution == 3)
+                                                SD
+                                            @else
+                                                Không có độ phân giải
+                                            @endif
+                                        </span><span class="episode"><i class="fa fa-play" aria-hidden="true"></i>
+                                            @if ($movie->subtitle == 0)
+                                                Vietsub
+                                            @else
+                                                Thuyết minh
+                                            @endif
+                                        </span>
                                         <div class="icon_overlay"></div>
                                         <div class="halim-post-title-box">
                                             <div class="halim-post-title ">
                                                 <p class="entry-title">{{ $movie->title }}</p>
-                                                <p class="original_title">My Roommate Is a Gumiho</p>
+                                                <p class="original_title">{{ $movie->name_movie }}</p>
                                             </div>
                                         </div>
                                     </a>

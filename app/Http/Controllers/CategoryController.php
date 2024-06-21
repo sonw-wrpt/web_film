@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category->slug        = $data['slug'];
         $category->description = $data['description'];
         $category->status      = $data['status'];
-          $category->position  = $newPosition;
+        $category->position    = $newPosition;
         $category->save();
         return redirect()->back()->with('status', 'Thêm danh mục thành công!');
     }

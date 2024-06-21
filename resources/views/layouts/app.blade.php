@@ -99,8 +99,33 @@
     <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
     <script type="text/javascript" src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $('.select-year').change(function() {
+            var year = $(this).find(':selected').val();
+            var movie_id = $(this).attr('id');
+            // alert(year);
+            // alert(movie_id);
+            $.ajax({
+                url: "{{ url('/update-year-movie') }}", // Sửa lỗi ở đây, dùng dấu phẩy thay vì dấu chấm phẩy
+                method: "GET",
+                data: {
+                    year: year,
+                    movie_id: movie_id
+                },
+                success: function() {
+                    alert('Thay đổi năm ' + year + ' thành công!')
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi xảy ra: ' + error);
+                }
+            });
+        });
+    </script>
+
     <script type="text/javascript">
         let table = new DataTable('#tablemovie');
+
         // $(document).realy(function() {
         //     $('#tablemovie').DataTable()
         // });

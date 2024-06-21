@@ -9,9 +9,7 @@
     <meta content="VN" name="geo.region" />
     <meta name="DC.language" scheme="utf-8" content="vi" />
     <meta name="language" content="Việt Nam">
-    <link rel="shortcut icon"
-        href="https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png"
-        type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('imgs/logo2.png') }}" type="image/x-icon" />
     <meta name="revisit-after" content="1 days" />
     <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
     <title>Phim hay 2021 - Xem phim hay nhất</title>
@@ -50,10 +48,10 @@
 
 <body class="home blog halimthemes halimmovies" data-masonry="">
     <header id="header">
-        <div class="container">
+        <div class="container ">
             <div class="row" id="headwrap">
                 <div class="col-md-3 col-sm-6 slogan">
-                    <p class="site-title"><a class="logo" href="" title="phim hay ">Phim Hay</p>
+                    <p class="site-title"><a class="logo" href="" title="phim hay "></p>
                     </a>
                 </div>
                 <div class="col-md-5 col-sm-6 halim-search-form hidden-xs">
@@ -84,7 +82,7 @@
     </header>
     <div class="navbar-container">
         <div class="container">
-            <nav class="navbar halim-navbar main-navigation" role="navigation" data-dropdown-hover="1">
+            <nav class="navbar halim-navbar main-navigation  fixed-top" role="navigation" data-dropdown-hover="1">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed pull-left" data-toggle="collapse"
                         data-target="#halim" aria-expanded="false">
@@ -131,6 +129,18 @@
                                                 href="{{ route('country', $count->slug) }}">{{ $count->title }}</a>
                                         </li>
                                     @endforeach
+                                </ul>
+                            </li>
+                            <li class="mega dropdown">
+                                <a title="Năm" href="#" data-toggle="dropdown" class="dropdown-toggle"
+                                    aria-haspopup="true">Năm <span class="caret"></span></a>
+                                <ul role="menu" class=" dropdown-menu">
+                                    @for ($year = 2000; $year <= 2024; $year++)
+                                        <li>
+                                            <a title="{{ $year }}"
+                                                href="{{ url('nam/' . $year) }}">{{ $year }}</a>
+                                        </li>
+                                    @endfor
                                 </ul>
                             </li>
                             @foreach ($category as $key => $cate)
@@ -183,6 +193,7 @@
     <script type='text/javascript' src='{{ asset('js/owl.carousel.min.js?ver=5.7.2') }}' id='carousel-js'></script>
     <script type='text/javascript' src='{{ asset('js/halimtheme-core.min.js?ver=1626273138') }}' id='halim-init-js'>
     </script>
+
     <style>
         #overlay_mb {
             position: fixed;
@@ -366,6 +377,7 @@
             float: left;
         }
     </style>
+
     <script>
         jQuery(document).ready(function($) {
             var owl = $('#halim_related_movies-2');

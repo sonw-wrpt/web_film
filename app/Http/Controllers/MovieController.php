@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
+use Carbon\Carbon;
 
 class MovieController extends Controller
 {
@@ -20,6 +21,13 @@ class MovieController extends Controller
         //
     }
 
+    public function update_year(Request $request)
+    {
+        $data   = $request->all();
+        $movies = Movie::find($data['movie_id']);
+        $movies->year = $data['year'];
+        $movies->save();
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -46,6 +54,11 @@ class MovieController extends Controller
         $movie = new Movie();
 
         $movie->title       = $data['title'];
+        $movie->tags        = $data['tags'];
+        $movie->name_movie  = $data['name_movie'];
+        $movie->time_movie  = $data['time_movie'];
+        $movie->resolution  = $data['resolution'];
+        $movie->subtitle    = $data['subtitle'];
         $movie->slug        = $data['slug'];
         $movie->hotmovie    = $data['hotmovie'];
         $movie->description = $data['description'];
@@ -53,7 +66,8 @@ class MovieController extends Controller
         $movie->category_id = $data['category_id'];
         $movie->country_id  = $data['country_id'];
         $movie->genre_id    = $data['genre_id'];
-
+        $movie->created_at  = Carbon::now('Asia/Ho_Chi_Minh');
+    
         $get_image = $request->file('image');
 
         if ($get_image) {
@@ -109,6 +123,11 @@ class MovieController extends Controller
         $movie = Movie::find($id);
 
         $movie->title       = $data['title'];
+        $movie->tags        = $data['tags'];
+        $movie->name_movie  = $data['name_movie'];
+        $movie->time_movie  = $data['time_movie'];
+        $movie->resolution  = $data['resolution'];
+        $movie->subtitle    = $data['subtitle'];
         $movie->slug        = $data['slug'];
         $movie->hotmovie    = $data['hotmovie'];
         $movie->description = $data['description'];
@@ -116,23 +135,25 @@ class MovieController extends Controller
         $movie->category_id = $data['category_id'];
         $movie->country_id  = $data['country_id'];
         $movie->genre_id    = $data['genre_id'];
+        $movie->updated_at  = Carbon::now('Asia/Ho_Chi_Minh');
 
         $get_image = $request->file('image');
 
 
         if ($get_image) {
-            if (!empty($movie->image)) {
+            if (file_exists('uploads/movie/' . $movie->image)) {
                 unlink('uploads/movie/' . $movie->image);
+            } else {
+                $get_name_image = $get_image->getClientOriginalName();
+                $name_image     = current(explode('.', $get_name_image));
+                $new_image      = $name_image . rand(0, 9999) . '.' . $get_image->getClientOriginalExtension();
+                $get_image->move('uploads/movie', $new_image);
+                $movie->image   = $new_image;
             }
-            $get_name_image = $get_image->getClientOriginalName();
-            $name_image     = current(explode('.', $get_name_image));
-            $new_image      = $name_image . rand(0, 9999) . '.' . $get_image->getClientOriginalExtension();
-            $get_image->move('uploads/movie', $new_image);
-            $movie->image   = $new_image;
         }
 
         $movie->save();
-        return redirect()->back()->with('status', 'Cập nhật phim thành công!');
+        return redirect()->route('movie.create')->with('status', 'Cập nhật phim thành công!');
     }
 
     /**
@@ -145,7 +166,7 @@ class MovieController extends Controller
     {
 
         $movie = Movie::find($id);
-        if (!empty($movie->image)) {
+        if (file_exists('uploads/movie/' . $movie->image)) {
             unlink('uploads/movie/' . $movie->image);
         }
         $movie->delete();

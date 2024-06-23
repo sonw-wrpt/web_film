@@ -43,12 +43,20 @@
                         <div class="movie_info col-xs-12">
                             <div class="movie-poster col-md-3">
                                 <img class="movie-thumb" src="{{ asset('uploads/movie/' . $movie->image) }}" alt="">
-                                <div class="bwa-content">
-                                    <div class="loader"></div>
-                                    <a href="{{ route('watch') }}" class="bwac-btn">
-                                        <i class="fa fa-play"></i>
-                                    </a>
-                                </div>
+                                @if ($movie->resolution != 4)
+                                    <div class="bwa-content">
+                                        <div class="loader"></div>
+                                        <a href="{{ route('watch') }}" class="bwac-btn">
+                                            <i class="fa fa-play"></i>
+                                        </a>
+                                    </div>
+                                @else
+                                    <a href="#watch-trailer" class="btn btn-primary trailer"
+                                        style=" display: flex;
+                                                justify-content: center;
+                                                align-items: center;">
+                                        Xem Trailer</a>
+                                @endif
                             </div>
                             <div class="film-poster col-md-9">
                                 <h1 class="movie-title title-1"
@@ -66,17 +74,26 @@
                                             @elseif($movie->resolution == 3)
                                                 SD
                                             @else
-                                                Không có độ phân giải
+                                                Trailer
                                             @endif
-                                        </span><span class="episode">
-                                            @if ($movie->subtitle == 0)
-                                                Vietsub
-                                            @else
-                                                Thuyết minh
-                                            @endif
-                                        </span></li>
+                                        </span>
+                                        @if ($movie->resolution != 4)
+                                            <span class="episode">
+                                                @if ($movie->subtitle == 0)
+                                                    Vietsub
+                                                @else
+                                                    Thuyết minh
+                                                @endif
+                                            </span>
+                                        @endif
+                                    </li>
 
                                     <li class="list-info-group-item"><span>Thời lượng</span> : {{ $movie->time_movie }}</li>
+
+                                    @if ($movie->season != 0)
+                                        <li class="list-info-group-item"><span>Season</span> : {{ $movie->season }}
+                                        </li>
+                                    @endif
 
                                     <li class="list-info-group-item"><span>Thể loại</span> :
                                         <a href="{{ route('genre', [$movie->genre->slug]) }}"
@@ -110,6 +127,23 @@
                             </article>
                         </div>
                     </div>
+
+                    <!--Traler-->
+                    <div class="section-bar clearfix">
+                        <h2 class="section-title"><span style="color:#ffed4d">Trailer</span></h2>
+                    </div>
+                    <div class="entry-content htmlwrap clearfix">
+                        <div class="video-item halim-entry-box">
+
+                            <article id="watch-trailer" class="item-content">
+                                <iframe width="100%" height="400"
+                                    src="https://www.youtube.com/embed/{{ $movie->trailer }}" title="YouTube video player"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
                     <!--tags movie-->
                     <div class="section-bar clearfix">
                         <h2 class="section-title"><span style="color:#ffed4d">Tags</span></h2>
@@ -132,6 +166,22 @@
                             </article>
                         </div>
                     </div>
+
+                    <!--comment facebook-->
+                    <div class="section-bar clearfix">
+                        <h2 class="section-title"><span style="color:#ffed4d">Binh luận</span></h2>
+                    </div>
+                    <div class="entry-content htmlwrap clearfix">
+                        @php
+                            $current_url = Request::url();
+                        @endphp
+                        <div class="video-item halim-entry-box">
+                            <article id="post-38424" class="item-content">
+                                <div class="fb-comments" data-href="{{ $current_url }}" data-width="100%"
+                                    data-numposts="10"></div>
+                            </article>
+                        </div>
+                    </div>
                 </div>
             </section>
             <section class="related-movies">
@@ -146,8 +196,8 @@
                                     <a class="halim-thumb" href="{{ route('movie', $movie->slug) }}"
                                         title="{{ $movie->title }}">
                                         <figure><img class="lazy img-responsive"
-                                                src="{{ asset('uploads/movie/' . $movie->image) }}" alt="Đại Thánh Vô Song"
-                                                title="{{ $movie->title }}"></figure>
+                                                src="{{ asset('uploads/movie/' . $movie->image) }}"
+                                                alt="Đại Thánh Vô Song" title="{{ $movie->title }}"></figure>
                                         <span class="status">
                                             @if ($movie->resolution == 0)
                                                 2K
@@ -213,6 +263,7 @@
                 </div>
             </section>
         </main>
-        <aside id="sidebar" class="col-xs-12 col-sm-12 col-md-4"></aside>
+        <!--sidebar-->
+        @include('pages.include.sidebar')
     </div>
 @endsection

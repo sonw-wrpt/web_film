@@ -32,6 +32,8 @@
     <link rel='stylesheet' id='style-css' href='{{ asset('css/style.css') }}' media='all' />
     <link rel='stylesheet' id='wp-block-library-css' href='{{ asset('css/style.min.css') }}' media='all' />
     <script type='text/javascript' src='{{ asset('js/jquery.min.js?ver=5.7.2') }}'' id=' halim-jquery-js'></script>
+
+
     <style type="text/css" id="wp-custom-css">
         .textwidget p a img {
             width: 100%;
@@ -42,6 +44,48 @@
             background: url(https://www.pngkey.com/png/detail/360-3601772_your-logo-here-your-company-logo-here-png.png) no-repeat top left;
             background-size: contain;
             text-indent: -9999px;
+        }
+
+
+        .halim-search-form {
+            position: relative;
+        }
+
+        .list-group {
+            width: 93.5%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #1b2d3c;
+            position: absolute;
+            z-index: 900;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 2px;
+            list-style-type: none;
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        .list-group-item {
+            cursor: pointer;
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+            color: #fff;
+
+        }
+
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-group-item:hover {
+            background-color: #1c3549;
+        }
+
+        .list-group-item img {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -54,25 +98,44 @@
                     <p class="site-title"><a class="logo" href="" title="phim hay "></p>
                     </a>
                 </div>
+
                 <div class="col-md-5 col-sm-6 halim-search-form hidden-xs">
                     <div class="header-nav">
                         <div class="col-xs-12">
                             <form id="search-form-pc" name="halimForm" role="search" action="" method="GET">
                                 <div class="form-group">
                                     <div class="input-group col-xs-12">
-                                        <input id="search" type="text" name="s" class="form-control"
+                                        <input id="search" type="text" name="search" class="form-control"
                                             placeholder="Tìm kiếm..." autocomplete="off" required>
                                         <i class="animate-spin hl-spin4 hidden"></i>
                                     </div>
                                 </div>
                             </form>
-                            <ul class="ui-autocomplete ajax-results hidden"></ul>
+                            <ul class="list-group" id="result" style="display: none;"></ul>
                         </div>
                     </div>
                 </div>
+
+
+                {{-- <div class="header-nav">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <div class="input-group col-xs-12">
+                                <input id="search" type="text" name="search" class="form-control"
+                                    placeholder="Tìm kiếm..." autocomplete="off">
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div> --}}
+
                 <div class="col-md-4 hidden-xs">
-                    <div id="get-bookmark" class="box-shadow"><i class="hl-bookmark"></i><span> Bookmarks</span><span
-                            class="count">0</span></div>
+                    <div id="get-bookmark" class="box-shadow">
+                        <i class="hl-bookmark"></i>
+                        <span> Bookmarks</span>
+                        <span class="count">0</span>
+                    </div>
                     <div id="bookmark-list" class="hidden bookmark-list-on-pc">
                         <ul style="margin: 0;"></ul>
                     </div>
@@ -135,7 +198,7 @@
                                 <a title="Năm" href="#" data-toggle="dropdown" class="dropdown-toggle"
                                     aria-haspopup="true">Năm <span class="caret"></span></a>
                                 <ul role="menu" class=" dropdown-menu">
-                                    @for ($year = 2000; $year <= 2024; $year++)
+                                    @for ($year = 2010; $year <= 2024; $year++)
                                         <li>
                                             <a title="{{ $year }}"
                                                 href="{{ url('nam/' . $year) }}">{{ $year }}</a>
@@ -377,6 +440,102 @@
             float: left;
         }
     </style>
+
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                var search = $(this).val().trim();
+                if (search !== '') {
+                    $('#result').html('').hide();
+                    var expression = new RegExp(search, "i");
+                    $.getJSON('/json/movies.json', function(data) {
+                        var seenTitles = new Set(); // Sử dụng Set để lưu các tiêu đề đã xuất hiện
+                        var found = false;
+                        $.each(data, function(key, value) {
+                            if ((value.title.search(expression) != -1 || value.description
+                                    .search(expression) != -1) && !seenTitles.has(value
+                                    .title)) {
+                                seenTitles.add(value.title); // Thêm tiêu đề vào Set
+                                var description = value.description.split(" ").slice(0, 25)
+                                    .join(" ") + "..."; // Cắt mô tả sau 20 từ
+                                $('#result').append(
+                                    '<li class="list-group-item">' +
+                                    '<img src="/uploads/movie/' + value.image +
+                                    '" height="60" width="60" /> ' +
+                                    value.title + ' <br> ' + description + '</li>'
+                                );
+                                found = true;
+                            }
+                        });
+                        if (found) {
+                            $('#result').show();
+                        }
+                    });
+                } else {
+                    $('#result').html('').hide();
+                }
+            });
+
+            $('#result').on('click', 'li', function() {
+                var clickText = $(this).text().split(' - ')[0];
+                $('#search').val(clickText);
+                $('#result').hide();
+            });
+        });
+    </script>
+
+
+    {{-- <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#search').keyup(function() {
+                $('#result').html('');
+                var search = $('#search').val();
+                if (search != '') {
+                    $('#result').css('display', 'inherit');
+                    var expression = new RegExp(search, "i");
+                    $.getJSON('/json/movies.json', function(data) {
+                        $.each(data, function(key, value) {
+                            if (value.title.search(expression) != -1 || value.description
+                                .search(expression) != -1) {
+                                $('#result').css('display', 'inherit');
+                                // var description = value.description.split(" ").slice(0, 20)
+                                //     .join(" ") + "...";
+                                $('#result').append(
+                                    '<li style="cursor:pointer" class="list-group-item link-class"><img src="/uploads/movie/' +
+                                    value.image + '" height="60" width="60"/>' + value
+                                    .title + ' </li>');
+                            }
+                        });
+                    })
+                } else {
+                    $('#result').css('display', 'none');
+                }
+            })
+            $('#result').on('click', 'li', function() {
+                var click_text = $(this).text().split('|');
+
+                $('#search').val($.trim(click_text[0]));
+
+                $("#result").html('');
+                $('#result').css('display', 'none');
+            });
+        })
+    </script> --}}
+
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0"
+        nonce="PGlaW7PO"></script>
+
+    <script type="text/javascript">
+        $.(".trailer").click(function(e) {
+            e.preventDefault();
+            var aid = $(this).attr("href");
+            $('html,body').animete({
+                scrollTop: $(aid).offset().top
+            }, 'slow');
+        });
+    </script>
 
     <script>
         jQuery(document).ready(function($) {

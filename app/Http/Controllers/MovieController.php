@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Country;
 use Carbon\Carbon;
+use Storage;
+use Illuminate\Support\Facades\File;
+
 
 class MovieController extends Controller
 {
@@ -18,28 +21,95 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+
+        $list = Movie::with('category', 'genre', 'country',)->orderBy('id', 'DESC')->get();
+
+        $path = public_path() . "/json";
+
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        File::put($path . '/movies.json', json_encode($list));
+        // dd($path);
+        return view('admincp.movie.index', compact('list'));
     }
 
     public function update_year(Request $request)
     {
         $data   = $request->all();
-        $movies = Movie::find($data['movie_id']);
-        $movies->year = $data['year'];
-        $movies->save();
+        $movie  = Movie::find($data['movie_id']);
+        $movie->year = $data['year'];
+        $movie->save();
     }
+
+    public function update_season(Request $request)
+    {
+        $data   = $request->all();
+        $movie  = Movie::find($data['movie_id']);
+        $movie->season = $data['season'];
+        $movie->save();
+    }
+
+    // public function update_topview(Request $request)
+    // {
+    //     $data   = $request->all();
+    //     $movies = Movie::find($data['movie_id']);
+    //     $movies->topview = $data['topview'];
+    //     $movies->save();
+    // }
+
+    // public function filter_topview(Request $request)
+    // {
+    //     $data = $request->all();
+    //     $movies = Movie::where('topview', $data['value'])->orderBy('updated_at', 'DESC')->take(15)->get();
+    //     $output = '';
+    //     foreach ($movies as $key => $movie) {
+    //         $resolution = '';
+    //         if ($movie->resolution == 0) {
+    //             $resolution = '2K';
+    //         } elseif ($movie->resolution == 1) {
+    //             $resolution = 'Full HD';
+    //         } elseif ($movie->resolution == 2) {
+    //             $resolution = 'HD';
+    //         } else {
+    //             $resolution = 'SD';
+    //         }
+    //         $output .= '
+    //             <div class="item post-37176">
+    //                 <a href="' . url('phim/' . $movie->slug) . '" title="' . $movie->title . '">
+    //                     <div class="item-link">
+    //                         <img src="' . url('uploads/movie/' . $movie->image) . '" class="lazy post-thumb" alt="' . $movie->title . '" title="' . $movie->title . '" />
+    //                         <span class="is_trailer">' . $resolution . '</span>
+    //                     </div>
+    //                     <p class="title">' . $movie->title . '</p>
+    //                 </a>
+    //                 <div class="viewsCount" style="color: #9d9d9d;">35000 lượt xem</div>
+    //                 <div style="float: left;">
+    //                     <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;">
+    //                         <span style="width: 0%"></span>
+    //                     </span>
+    //                 </div>
+    //             </div>
+    //         ';
+    //     }
+    //     return response()->json($output); 
+    // }
+
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function create()
     {
         $category = Category::pluck('title', 'id');
         $genre    = Genre::pluck('title', 'id');
         $country  = Country::pluck('title', 'id');
-        $list     = Movie::with('category', 'genre', 'country')->orderBy('id', 'DESC')->get();
-        return view('admincp.movie.form', compact('list', 'category', 'genre', 'country'));
+
+        return view('admincp.movie.form', compact('category', 'genre', 'country'));
     }
 
     /**
@@ -56,6 +126,7 @@ class MovieController extends Controller
         $movie->title       = $data['title'];
         $movie->tags        = $data['tags'];
         $movie->name_movie  = $data['name_movie'];
+        $movie->trailer     = $data['trailer'];
         $movie->time_movie  = $data['time_movie'];
         $movie->resolution  = $data['resolution'];
         $movie->subtitle    = $data['subtitle'];
@@ -67,7 +138,7 @@ class MovieController extends Controller
         $movie->country_id  = $data['country_id'];
         $movie->genre_id    = $data['genre_id'];
         $movie->created_at  = Carbon::now('Asia/Ho_Chi_Minh');
-    
+
         $get_image = $request->file('image');
 
         if ($get_image) {
@@ -105,9 +176,9 @@ class MovieController extends Controller
         $category = Category::pluck('title', 'id');
         $genre    = Genre::pluck('title', 'id');
         $country  = Country::pluck('title', 'id');
-        $list     = Movie::with('category', 'genre', 'country')->orderBy('id', 'DESC')->get();
+
         $movie    = Movie::find($id);
-        return view('admincp.movie.form', compact('list', 'category', 'genre', 'country', 'movie'));
+        return view('admincp.movie.form', compact('category', 'genre', 'country', 'movie'));
     }
 
     /**
@@ -125,6 +196,7 @@ class MovieController extends Controller
         $movie->title       = $data['title'];
         $movie->tags        = $data['tags'];
         $movie->name_movie  = $data['name_movie'];
+        $movie->trailer     = $data['trailer'];
         $movie->time_movie  = $data['time_movie'];
         $movie->resolution  = $data['resolution'];
         $movie->subtitle    = $data['subtitle'];

@@ -104,10 +104,8 @@
         $('.select-year').change(function() {
             var year = $(this).find(':selected').val();
             var movie_id = $(this).attr('id');
-            // alert(year);
-            // alert(movie_id);
             $.ajax({
-                url: "{{ url('/update-year-movie') }}", // Sửa lỗi ở đây, dùng dấu phẩy thay vì dấu chấm phẩy
+                url: "{{ url('/update-year-movie') }}",
                 method: "GET",
                 data: {
                     year: year,
@@ -122,6 +120,86 @@
             });
         });
     </script>
+
+    <script type="text/javascript">
+        $('.select-season').change(function() {
+            var season = $(this).find(':selected').val();
+            var movie_id = $(this).attr('id');
+            $.ajax({
+                url: "{{ url('/update-season-movie') }}",
+                method: "GET",
+                data: {
+                    season: season,
+                    movie_id: movie_id
+                },
+                success: function() {
+                    alert('Thay đổi  ' + season + ' thành công!')
+                },
+                error: function(xhr, status, error) {
+                    alert('Có lỗi xảy ra: ' + error);
+                }
+            });
+        });
+    </script>
+
+    {{-- <script type="text/javascript">
+        $('.select-topview').change(function() {
+            var topview = $(this).find(':selected').val();
+            var movie_id = $(this).attr('id');
+            var text;
+
+            if (topview == 0) {
+                text = 'Ngày';
+            } else if (topview == 1) {
+                text = 'Tuần';
+            } else {
+                text = 'Tháng';
+            }
+            $.ajax({
+                url: "{{ url('/update-topview-movie') }}",
+                method: "GET",
+                data: {
+                    topview: topview,
+                    movie_id: movie_id
+                },
+                success: function() {
+                    alert('Thay đổi top view ' + text + ' thành công!');
+                }
+            });
+        });
+    </script> --}}
+
+
+    {{-- <script type="text/javascript">
+        $(document).ready(function() {
+            $('.filter-sidebar').click(function(e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                var value;
+                if (href == '#day-pane') {
+                    value = 0;
+                } else if (href == '#week-pane') {
+                    value = 1;
+                } else {
+                    value = 2;
+                }
+                $.ajax({
+                    url: "{{ url('/filter-topview-movie') }}",
+                    method: "GET",
+                    data: {
+                        value: value
+                    },
+                    success: function(data) {
+                        $('#show' + value).html(data); 
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Có lỗi xảy ra: ' + error);
+                    }
+                });
+            });
+        });
+    </script> --}}
+
 
     <script type="text/javascript">
         let table = new DataTable('#tablemovie');
